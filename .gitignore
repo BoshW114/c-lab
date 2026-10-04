@@ -1,20 +1,17 @@
-# 编译产物
 *.o
 *.exe
+*_asan
 *.obj
 *.a
 *.so
 *.dll
 
-# 编辑器/IDE
 .vscode/
 .idea/
 *.swp
 
-# 系统文件
 Thumbs.db
 desktop.ini
 
-# 临时文件
 *.bak
 *.tmp
