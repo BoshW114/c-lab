@@ -1,10 +1,6 @@
 *.o
 *.exe
 *_asan
-*.obj
-*.a
-*.so
-*.dll
 
 .vscode/
 .idea/
@@ -15,3 +11,10 @@ desktop.ini
 
 *.bak
 *.tmp
+
+# 编译产物
+dynarray/dynarray
+dynarray/test_dynarray
+list/list_demo
+list/test_list
+list/test

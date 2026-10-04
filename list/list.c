@@ -1,36 +1,21 @@
-#include <stdlib.h>
+#include<stdio.h>
+#include<stdlib.h>
 #include "list.h"
-
-/* Internal layout. Not visible to callers, so it can change freely. */
 typedef struct ListNode
 {
-    int              value;
-    struct ListNode *next;
+    int val;
+    struct ListNode* next;
 } ListNode;
-
-struct List
+typedef struct List
 {
-    ListNode *head;   /* first node, or NULL when empty          */
-    ListNode *tail;   /* last node, or NULL when empty           */
-    size_t    size;   /* cached count, so list_size is O(1)      */
-};
-
-static ListNode *node_new(int value)
-{
-    ListNode *n = malloc(sizeof(ListNode));
-    if (n == NULL)
-    {
-        return NULL;
-    }
-    n->value = value;
-    n->next = NULL;
-    return n;
-}
-
+    ListNode* head;
+    ListNode* tail;
+    size_t size;
+}List;
 List *list_create(void)
 {
     List *l = malloc(sizeof(List));
-    if (l == NULL)
+    if(l == NULL)
     {
         return NULL;
     }
@@ -39,102 +24,91 @@ List *list_create(void)
     l->size = 0;
     return l;
 }
-
-void list_destroy(List *l)
-{
-    if (l == NULL)
-    {
-        return;
-    }
-
-    /* Grab next before freeing the current node: after free the
-     * node's fields must not be read. */
-    ListNode *cur = l->head;
-    while (cur != NULL)
-    {
-        ListNode *next = cur->next;
-        free(cur);
-        cur = next;
-    }
-
-    free(l);
-}
-
 int list_push_front(List *l, int value)
 {
-    if (l == NULL)
+    if(l == NULL)
     {
         return -1;
     }
-
-    ListNode *n = node_new(value);
-    if (n == NULL)
+    ListNode* n = malloc(sizeof(ListNode));
+    if(n == NULL)
     {
         return -1;
     }
-
+    n->val = value;
     n->next = l->head;
     l->head = n;
-    if (l->tail == NULL)
+    if(l->tail == NULL)
     {
-        l->tail = n;   /* first element becomes the tail too */
+        l->tail = n;
     }
-    l->size++;
+    l->size ++;
     return 0;
 }
-
 int list_push_back(List *l, int value)
 {
-    if (l == NULL)
+    if(l == NULL)
     {
         return -1;
     }
-
-    ListNode *n = node_new(value);
-    if (n == NULL)
+    ListNode *n = malloc(sizeof(ListNode));
+    if(n == NULL)
     {
         return -1;
     }
-
-    if (l->tail == NULL)
+    n->val = value;
+    n->next = NULL;
+    if(l->tail == NULL)
     {
         l->head = n;
         l->tail = n;
     }
     else
     {
-        l->tail->next = n;
-        l->tail = n;
+    l->tail->next = n;
+    l->tail = n;
     }
-    l->size++;
+    l->size ++;
     return 0;
 }
-
-int list_get(const List *l, size_t i, int *out)
+int list_get (const List *l, size_t i, int *out)
 {
-    if (l == NULL || out == NULL)
+    if(l == NULL || out == NULL)
     {
         return -1;
     }
-    if (i >= l->size)
+    if(i >= l->size)
     {
         return -1;
     }
-
-    const ListNode *cur = l->head;
-    for (size_t k = 0; k < i; k++)
+    const ListNode* cur = l->head;
+    for(size_t k=0;k<i;k++)
     {
         cur = cur->next;
     }
-    *out = cur->value;
+    *out = cur->val;
     return 0;
 }
-
 size_t list_size(const List *l)
 {
-    if (l == NULL)
+    if(l == NULL)
     {
         return 0;
     }
     return l->size;
+}
+void list_destroy(List *l)
+{
+    if(l == NULL)
+    {
+        return;
+    }
+    ListNode *cur = l->head;
+    while(cur != NULL)
+    {
+        ListNode* next = cur->next;
+        free(cur);
+        cur = next;
+    }
+    free(l);
 }
